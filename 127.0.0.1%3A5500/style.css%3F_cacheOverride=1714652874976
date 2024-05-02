@@ -13,6 +13,7 @@ body {
     margin: 0;
     font-family: 'Open Sans';
     background-color: #383838;
+    display: block;
 }
 
 header {
@@ -38,21 +39,14 @@ header img {
     height: 40px;
 }
 
-.search-area {
-    display: flex;
-    align-items: center;
-    color: #757575;
-    border-radius: 20px;
-    border: solid 1px #757575;
-}
-
 input {
     height: 32px;
-    
+    border-radius: 20px;
     margin-left: 16px;
     padding: 8px;
     background-color: #383838;
-    border-style: unset;
+    color: #757575;
+    border: solid 2px;
 }
 
 #loadingSpinner {
@@ -102,6 +96,7 @@ input {
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }

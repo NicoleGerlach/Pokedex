@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
-    <link rel="icon" type="image/x-icon" href="/img/pokeball.png">
+    <link rel="icon" type="image/x-icon" href="./img/pokeball.png">
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="chart.js"></script>
@@ -17,9 +17,11 @@
     <header>
         <h2>Pokedex</h2>
         <div class="d-f ai-c">
-            <img src="./img/suche.png"></imgsrc>
-            <input id="searchInput" type="text" oninput="handleSearch()" placeholder="Suche Pokemon">
-            <ul id="pokemonList"></ul>
+            <img src="./img/suche.png"></img>
+            <div class="search-area">
+                <input id="searchInput" type="text" oninput="handleSearch()" placeholder="Search Pokemon">
+                <div onclick="deleteCharactersOfInput()">x</div>
+            </div>
         </div>
     </header>
     <div id="loadingSpinner" class="d-none">
@@ -27,9 +29,10 @@
     </div>
     <div id="dialog" class="d-none" onclick="closePokemonCard()"></div>
     <div id="content"></div>
-    <div class="d-f jc-c"><button id="loadButton" onclick="loadMorePokemon()">Lade mehr Pokemon</button></div>
+    <div class="d-f jc-c"><button id="loadButton" onclick="loadMorePokemon()">Load more Pokemon</button></div>
     <footer>
-        <h3>Pokedex erstellt von Nicole Gerlach April 2024</h3>
+        <h3>Pokedex created by Nicole Gerlach April 2024</h3>
     </footer>
 </body>
+
 </html>

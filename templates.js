@@ -39,10 +39,7 @@ function returnPokemonCardHtml(i, currentPokemon) {
                     </tr>
                     <tr>
                         <td>Ability</td>
-                        <td>
-                            ${capitalizeName(currentPokemon.abilities[0].ability.name)}, 
-                            ${capitalizeName(currentPokemon.abilities[1].ability.name)}
-                        </td>
+                        <td id="abilities_${i}"></td>
                     </tr>
                 </table>
             </div>

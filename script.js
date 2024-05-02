@@ -1,6 +1,7 @@
 let pokemons = [];
 let currentIndex;
 let currentNames = [];
+let currentTypes = [];
 
 const typColors = {
     fire: '#FF421C',
@@ -58,7 +59,20 @@ function renderPokemons() {
 function renderPokemonNames() { //Namen rendern und in Array speichern vereinfacht Suchfunktion
     for (let n = 0; n < pokemons.length; n++) {
         let currentName = pokemons[n].name.toLowerCase();
-        currentNames.push(currentName);
+        // Abfrage, um Dopplungen zu vermeiden
+        if (!currentNames.includes(currentName)) {
+            currentNames.push(currentName);
+        }
+    }
+}
+
+function renderPokemonTypes() { //Typen rendern und in Array speichern
+    for (let t = 0; t < pokemons.length; t++) {
+        let currentType = pokemons[t].types.type.name;
+        // Abfrage, um Dopplungen zu vermeiden
+        if (!currentTypes.includes(currentType)) {
+            currentTypes.push(currentType);
+        }    
     }
 }
 
@@ -67,6 +81,7 @@ function openPokemonCard(i) {
     let pokemonContainer = document.getElementById('dialog');
     let currentPokemon = pokemons[i];
     pokemonContainer.innerHTML = returnPokemonCardHtml(i, currentPokemon);
+    addPokemonAbilities(i, currentPokemon);
     loadTypColor(currentPokemon);
     renderChart(currentPokemon);
 }
@@ -89,6 +104,20 @@ function dontClose(event) {
 
 function closePokemonCard() {
     document.getElementById('dialog').classList.add('d-none');
+}
+
+function addPokemonAbilities(i, currentPokemon) {
+    const abilityBox = document.getElementById(`abilities_${i}`);
+    abilityBox.innerHTML = '';
+    let isLast = false;
+
+    currentPokemon.abilities.forEach((ability, index) => {
+        let skill = capitalizeName(ability.ability.name);
+        abilityBox.innerHTML += skill;
+        if (!isLast) {
+            abilityBox.innerHTML += ', ';
+        }
+    });
 }
 
 function loadTypColor(pokemon, i) {
@@ -188,45 +217,13 @@ function capitalizeName(name) { //Schreibt ersten Buchstaben der Variablen und e
 
 function handleSearch() {
     let filterWord = document.getElementById('searchInput').value.trim();
-
-    if (filterWord.length >= 3) {
-        searchForPokemon(filterWord.toLowerCase());
-    } else {
-        // Wenn das Eingabefeld leer ist, zeige alle Pokemon an
+    if (filterWord.length < 3) {
         pokemons.forEach((pokemon, i) => {
-            document.getElementById(`pokemon-${i}`).style.display = 'flex';
+            document.getElementById(`pokemon-${i}`).style.displax = 'flex';
         });
-    }
-}
-
-function searchForPokemon(filterWord) {
-    let searchNames = currentNames.filter(function (name) {
-        return name.includes(filterWord);
-    });
-
-    // Verstecke alle Pokemon
-    pokemons.forEach((pokemon, i) => {
-        document.getElementById(`pokemon-${i}`).style.display = 'none';
-    });
-
-    // Zeige nur passende Pokemon an
-    searchNames.forEach((name) => {
-        let index = currentNames.indexOf(name);
-        document.getElementById(`pokemon-${index}`).style.display = 'flex';
-    });
-}
-
-function handleSearch() {
-    let filterWord = document.getElementById('searchInput').value.trim();
-
-    if (filterWord.length >= 3) {
-        searchForPokemon(filterWord.toLowerCase());
     } else {
-        // Wenn das Eingabefeld leer ist, zeige alle Pokemon an
-        pokemons.forEach((pokemon, i) => {
-            document.getElementById(`pokemon-${i}`).style.display = 'flex';
-        });
-    }
+        searchForPokemon(filterWord.toLowerCase());
+    };
 }
 
 function searchForPokemon(filterWord) {
