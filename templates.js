@@ -2,8 +2,8 @@ function returnPokemonHtml(i, pokemon) {
     return `
         <div id="pokemon-${i}" class="pokemonCardSmall" onclick="openPokemonCard(${i})">
             <img class="pokemon-img" src="${pokemon.sprites.other.dream_world.front_default}">
-            <h2 id="pokemonName" class="pokemon-name f-l">${pokemon.forms[0].name}</h2>
-            <div class="type f-l">${pokemon.types[0].type.name}</div>
+            <h2 id="pokemonName" class="pokemon-name first-letter">${pokemon.forms[0].name}</h2>
+            <div id"pokemonTypeBox" class="type first-letter">${pokemon.types[0].type.name}</div>
         </div>
     `;
 }

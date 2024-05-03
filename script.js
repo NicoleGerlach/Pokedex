@@ -242,3 +242,7 @@ function searchForPokemon(filterWord) {
         document.getElementById(`pokemon-${index}`).style.display = 'flex';
     });
 }
+
+function deleteCharactersOfInput() {
+    document.getElementById('searchInput') = '';
+}

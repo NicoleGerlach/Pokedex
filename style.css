@@ -32,10 +32,11 @@ header h2 {
     margin-block-end: 0;
     font-size: 50px;
     margin-left: 8px;
-}
+}f
 
-header img {
-    height: 40px;
+.search-container {
+    display: flex;
+    align-items: center;
 }
 
 .search-area {
@@ -48,11 +49,18 @@ header img {
 
 input {
     height: 32px;
-    
+    outline: none;
     margin-left: 16px;
     padding: 8px;
     background-color: #383838;
     border-style: unset;
+    color: #757575;
+    font-size: 16px;
+}
+
+.delete {
+    padding-right: 16px;
+    cursor: pointer;
 }
 
 #loadingSpinner {
@@ -114,7 +122,7 @@ input {
     max-width: 1440px;
 }
 
-.f-l::first-letter {
+.first-letter::first-letter {
     text-transform: capitalize;
 }
 
@@ -239,6 +247,11 @@ h1 {
     margin: 24px;
 }
 
+.load-button {
+    display: flex;
+    justify-content: center;
+}
+
 .d-none {
     display: none !important;
 }
@@ -319,7 +332,8 @@ h3 {
         flex-direction: column;
         justify-content: center;
     }
-    h2 {
+
+    header h2 {
         margin-left: unset;
     }
 }

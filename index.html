@@ -16,12 +16,9 @@
 <body onload="loadPokemon()">
     <header>
         <h2>Pokedex</h2>
-        <div class="d-f ai-c">
-            <img src="./img/suche.png"></img>
-            <div class="search-area">
-                <input id="searchInput" type="text" oninput="handleSearch()" placeholder="Search Pokemon">
-                <div onclick="deleteCharactersOfInput()">x</div>
-            </div>
+        <div class="search-area">
+            <input id="searchInput" type="text" oninput="handleSearch()" placeholder="Search Pokemon">
+            <img src="./img/cross grey.png" class="delete" onclick="deleteCharactersOfInput()"> 
         </div>
     </header>
     <div id="loadingSpinner" class="d-none">
@@ -29,7 +26,7 @@
     </div>
     <div id="dialog" class="d-none" onclick="closePokemonCard()"></div>
     <div id="content"></div>
-    <div class="d-f jc-c"><button id="loadButton" onclick="loadMorePokemon()">Load more Pokemon</button></div>
+    <div class="load-button"><button id="loadButton" onclick="loadMorePokemon()">Load more Pokemon</button></div>
     <footer>
         <h3>Pokedex created by Nicole Gerlach April 2024</h3>
     </footer>
