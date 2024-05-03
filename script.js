@@ -49,14 +49,17 @@ async function loadPokemon() {
 
 function renderPokemons() {
     let pokemonContainer = document.getElementById('content');
-    pokemons.forEach((pokemon, i) => {
-        pokemonContainer.innerHTML += returnPokemonHtml(i, pokemon);
+    for (let i = 0; i < pokemons.length; i++) {
+        const pokemon = pokemons[i];
+        pokemonContainer.innerHTML += generatePokemonHtml(i, pokemon);
         loadTypColor(pokemon, i);
-    });
+        renderPokemonTypes(i);
+    }
     renderPokemonNames();
 }
 
-function renderPokemonNames() { //Namen rendern und in Array speichern vereinfacht Suchfunktion
+function renderPokemonNames() { 
+    //Namen rendern und in Array speichern vereinfacht Suchfunktion
     for (let n = 0; n < pokemons.length; n++) {
         let currentName = pokemons[n].name.toLowerCase();
         // Abfrage, um Dopplungen zu vermeiden
@@ -66,21 +69,27 @@ function renderPokemonNames() { //Namen rendern und in Array speichern vereinfac
     }
 }
 
-function renderPokemonTypes() { //Typen rendern und in Array speichern
-    for (let t = 0; t < pokemons.length; t++) {
-        let currentType = pokemons[t].types.type.name;
-        // Abfrage, um Dopplungen zu vermeiden
-        if (!currentTypes.includes(currentType)) {
-            currentTypes.push(currentType);
-        }    
-    }
+function renderPokemonTypes(i) {
+    const pokemonTypeBox = document.getElementById(`pokemon-type-box${i}`);
+    pokemonTypeBox.innerHTML = '';
+    let pokemonTypes = pokemons[i].types;
+
+    pokemonTypes.forEach((oneType) => {
+        typeNameCapitalized = capitalizeName(oneType.type.name);
+        pokemonTypeBox.innerHTML += `<div class="type-box">${typeNameCapitalized}</div>`;
+
+        // Überprüfen, ob der Typ bereits im globalen Array currentTypes vorhanden ist
+        if (!currentTypes.includes(typeNameCapitalized)) {
+            currentTypes.push(typeNameCapitalized);
+        }
+    });
 }
 
 function openPokemonCard(i) {
     document.getElementById('dialog').classList.remove('d-none');
     let pokemonContainer = document.getElementById('dialog');
     let currentPokemon = pokemons[i];
-    pokemonContainer.innerHTML = returnPokemonCardHtml(i, currentPokemon);
+    pokemonContainer.innerHTML = generatePokemonCardHtml(i, currentPokemon);
     addPokemonAbilities(i, currentPokemon);
     loadTypColor(currentPokemon);
     renderChart(currentPokemon);
@@ -150,7 +159,7 @@ function loadTypColorForChart(pokemon, i) {
     }
 }
 
-async function loadMorePokemon() {
+async function loadMorePokemon(i) {
     let offset = pokemons.length;
     let url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`;
     let response = await fetch(url);
@@ -163,13 +172,14 @@ async function loadMorePokemon() {
         let newIndex = offset + j;
         renderNewPokemon(newIndex);
         loadTypColor(pokemonData, newIndex);
+        renderPokemonTypes(newIndex);
     }
 }
 
 async function renderNewPokemon(index) {
     let pokemonContainer = document.getElementById('content');
     let pokemon = pokemons[index];
-    pokemonContainer.innerHTML += returnPokemonHtml(index, pokemon);
+    pokemonContainer.innerHTML += generatePokemonHtml(index, pokemon);
     renderPokemonNames();
 }
 
@@ -244,5 +254,5 @@ function searchForPokemon(filterWord) {
 }
 
 function deleteCharactersOfInput() {
-    document.getElementById('searchInput') = '';
+    document.getElementById('searchInput').value = '';
 }

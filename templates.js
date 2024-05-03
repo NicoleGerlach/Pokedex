@@ -1,29 +1,29 @@
-function returnPokemonHtml(i, pokemon) {
+function generatePokemonHtml(i, pokemon) {
     return `
         <div id="pokemon-${i}" class="pokemonCardSmall" onclick="openPokemonCard(${i})">
             <img class="pokemon-img" src="${pokemon.sprites.other.dream_world.front_default}">
             <h2 id="pokemonName" class="pokemon-name first-letter">${pokemon.forms[0].name}</h2>
-            <div id"pokemonTypeBox" class="type first-letter">${pokemon.types[0].type.name}</div>
+            <div id="pokemon-type-box${i}" class="type"></div>
         </div>
     `;
 }
 
-function returnPokemonCardHtml(i, currentPokemon) {
+function generatePokemonCardHtml(i, currentPokemon) {
     return `
     <div id="pokemonCard" onclick="dontClose(event)">
-        <h1 class="f-l">${currentPokemon.name}</h1><div
+        <h1 class="first-letter">${currentPokemon.name}</h1><div
         <div class="info-container">
-            <img class="pokemon-img mt" src="${currentPokemon.sprites.other.dream_world.front_default}">
+            <img class="pokemon-img margin-top" src="${currentPokemon.sprites.other.dream_world.front_default}">
             <div class="arrow">
                 <img onclick="previousPokemonCard(${i})" src="./img/linker-pfeil.png">
                 <img onclick="nextPokemonCard(${i})" src="./img/rechter-pfeil.png">
             </div>
-            <div class="d-f sp-a f-l card-style">${currentPokemon.types[0].type.name}</div>
-            <div class="d-f sp-a m24">
-                <div id="aboutFolder" onclick="toggleInfos('about')" class="ul-a active">About</div>
-                <div id="baseStatsFolder" onclick="toggleInfos('baseStats')" class="ul-a">Base Stats</div>
+            <div class="card-style">${currentPokemon.types[0].type.name}</div>
+            <div class="type-area">
+                <div id="aboutFolder" onclick="toggleInfos('about')" class="underline active">About</div>
+                <div id="baseStatsFolder" onclick="toggleInfos('baseStats')" class="underline">Base Stats</div>
             </div>
-            <div id="about" class="d-f sp-a fd-c mlr24">
+            <div id="about" class="about">
                 <table>
                     <tr>
                         <td>Height</td>

@@ -148,12 +148,21 @@ input {
 }
 
 .type {
-    border: 1px solid white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    padding: 8px;
+    margin-bottom: 20px;
+    width: 93%;
+}
+
+.type-box {
+    border: solid 1px white;
     border-radius: 20px;
     padding: 8px;
-    text-align: center;
-    margin-bottom: 20px;
-    width: 80px;
+    width: 70px;
+    margin: 0 16px 0 16px;
 }
 
 .info-container {
@@ -198,6 +207,14 @@ h1 {
     border-radius: 20px;
     align-items: center;
     margin-left: 24px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.type-area {
+    display: flex;
+    justify-content: space-around;
+    margin: 24px;
 }
 
 .arrow {
@@ -206,45 +223,19 @@ h1 {
     margin: -60px 8px 8px 8px;
 }
 
+.about {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    margin: 0 24px 0 24px;
+}
+
 .arrow img {
     width: 60px;
 }
 
-.mt {
+.margin-top {
     margin-top: -150px;
-}
-
-.ml24 {
-    margin-left: 24px;
-}
-
-.mlr24 {
-    margin-left: 24px;
-    margin-right: 24px;
-}
-
-.d-f {
-    display: flex;
-}
-
-.jc-c {
-    justify-content: center;
-}
-
-.sp-a {
-    justify-content: space-around;
-}
-
-.fd-c {
-    flex-direction: column;
-}
-
-.ai-c {
-    align-items: center;
-}
-
-.m24 {
-    margin: 24px;
 }
 
 .load-button {
@@ -254,6 +245,10 @@ h1 {
 
 .d-none {
     display: none !important;
+}
+
+.d-flex {
+    display: flex;
 }
 
 .ul-a {
