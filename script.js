@@ -72,7 +72,6 @@ function renderPokemonTypes(i, id) {
     const pokemonTypeBox = document.getElementById(id);
     pokemonTypeBox.innerHTML = '';
     let pokemonTypes = pokemons[i].types;
-
     pokemonTypes.forEach((oneType) => {
         typeNameCapitalized = capitalizeName(oneType.type.name);
         pokemonTypeBox.innerHTML += `<div class="type-box">${typeNameCapitalized}</div>`;
@@ -114,7 +113,6 @@ function addPokemonAbilities(i, currentPokemon) {
     const abilityBox = document.getElementById(`abilities${i}`);
     abilityBox.innerHTML = '';
     let isLast = false;
-
     currentPokemon.abilities.forEach((ability, index) => {
         let skill = capitalizeName(ability.ability.name);
         abilityBox.innerHTML += skill;
@@ -134,10 +132,6 @@ function loadTypColor(pokemon, i) {
     let pokemonCard = document.getElementById('pokemonCard');
     if (pokemonCard) {
         pokemonCard.style.backgroundColor = color;
-    }
-    let cardStyle = document.getElementsByClassName('card-style')[0];
-    if (cardStyle) {
-        cardStyle.style.backgroundColor = color;
     }
 }
 
@@ -238,16 +232,19 @@ function searchForPokemon(filterWord) {
 
     // Verstecke alle Pokemon
     pokemons.forEach((pokemon, i) => {
-        document.getElementById(`pokemon-${i}`).style.display = 'none';
+        document.getElementById(`pokemon-${i}`).classList.add('d-none');
     });
 
     // Zeige nur passende Pokemon an
     searchNames.forEach((name) => {
         let index = currentNames.indexOf(name);
-        document.getElementById(`pokemon-${index}`).style.display = 'flex';
+        document.getElementById(`pokemon-${index}`).classList.remove('d-none');
     });
 }
 
-function deleteCharactersOfInput() {
+function deleteCharactersOfInput(i) {
     document.getElementById('searchInput').value = '';
+    pokemons.forEach((pokemon, index) => {
+        document.getElementById(`pokemon-${index}`).classList.remove('d-none');
+    });
 }
