@@ -1,6 +1,6 @@
 function generatePokemonHtml(i, pokemon) {
     return `
-        <div id="pokemon-${i}" class="pokemonCardSmall" onclick="openPokemonCard(${i})">
+        <div id="pokemon-${i}" class="pokemonCardSmall shrink" onclick="openPokemonCard(${i})">
             <img class="pokemon-img" src="${pokemon.sprites.other.dream_world.front_default}">
             <h2 id="pokemonName" class="pokemon-name first-letter">${pokemon.forms[0].name}</h2>
             <div id="pokemon-type-box${i}" class="type"></div>
@@ -18,7 +18,7 @@ function generatePokemonCardHtml(i, currentPokemon) {
                 <img onclick="previousPokemonCard(${i})" src="./img/linker-pfeil.png">
                 <img onclick="nextPokemonCard(${i})" src="./img/rechter-pfeil.png">
             </div>
-            <div class="card-style">${currentPokemon.types[0].type.name}</div>
+            <div id="pokemon-type-container${i}" class="card-style">${currentPokemon.types[0].type.name}</div>
             <div class="type-area">
                 <div id="aboutFolder" onclick="toggleInfos('about')" class="underline active">About</div>
                 <div id="baseStatsFolder" onclick="toggleInfos('baseStats')" class="underline">Base Stats</div>
@@ -39,7 +39,7 @@ function generatePokemonCardHtml(i, currentPokemon) {
                     </tr>
                     <tr>
                         <td>Ability</td>
-                        <td id="abilities_${i}"></td>
+                        <td id="abilities${i}"></td>
                     </tr>
                 </table>
             </div>

@@ -32,7 +32,7 @@ header h2 {
     margin-block-end: 0;
     font-size: 50px;
     margin-left: 8px;
-}f
+}
 
 .search-container {
     display: flex;
@@ -45,6 +45,11 @@ header h2 {
     color: #757575;
     border-radius: 20px;
     border: solid 1px #757575;
+}
+
+.search-area img {
+    height: 32px;
+    filter: invert(43%) sepia(1%) saturate(1237%) hue-rotate(330deg) brightness(105%) contrast(85%);
 }
 
 input {
@@ -141,6 +146,17 @@ input {
     cursor: pointer;
 }
 
+.shrink {
+    transition: 0.5s ease;
+    }
+    
+    .shrink:hover{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+    transition: 0.5s ease;
+    }
+
 .pokemon-img {
     height: 200px;
     width: -webkit-fill-available;
@@ -202,11 +218,8 @@ h1 {
 }
 
 .card-style {
-    width: 100px;
-    height: 40px;
     border-radius: 20px;
-    align-items: center;
-    margin-left: 24px;
+    text-align: center;
     display: flex;
     justify-content: space-around;
 }
@@ -251,17 +264,17 @@ h1 {
     display: flex;
 }
 
-.ul-a {
+.underline {
     position: relative;
     color: #383838;
 }
 
-.ul-a:hover {
+.underline:hover {
     cursor: pointer;
     color: #383838;
 }
 
-.ul-a:hover::before {
+.underline:hover::before {
     content: "";
     position: absolute;
     display: block;
@@ -274,13 +287,13 @@ h1 {
     transition: transform 0.3s ease;
 }
 
-.ul-a.active {
+.underline.active {
     text-decoration: underline;
     text-decoration-color: #383838;
     text-decoration-thickness: 3px;
 }
 
-.ul-a::before {
+.underline::before {
     content: "";
     position: absolute;
     display: block;

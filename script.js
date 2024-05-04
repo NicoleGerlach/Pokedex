@@ -1,7 +1,6 @@
 let pokemons = [];
 let currentIndex;
 let currentNames = [];
-let currentTypes = [];
 
 const typColors = {
     fire: '#FF421C',
@@ -53,7 +52,7 @@ function renderPokemons() {
         const pokemon = pokemons[i];
         pokemonContainer.innerHTML += generatePokemonHtml(i, pokemon);
         loadTypColor(pokemon, i);
-        renderPokemonTypes(i);
+        renderPokemonTypes(i, `pokemon-type-box${i}`);
     }
     renderPokemonNames();
 }
@@ -69,19 +68,14 @@ function renderPokemonNames() {
     }
 }
 
-function renderPokemonTypes(i) {
-    const pokemonTypeBox = document.getElementById(`pokemon-type-box${i}`);
+function renderPokemonTypes(i, id) {
+    const pokemonTypeBox = document.getElementById(id);
     pokemonTypeBox.innerHTML = '';
     let pokemonTypes = pokemons[i].types;
 
     pokemonTypes.forEach((oneType) => {
         typeNameCapitalized = capitalizeName(oneType.type.name);
         pokemonTypeBox.innerHTML += `<div class="type-box">${typeNameCapitalized}</div>`;
-
-        // Überprüfen, ob der Typ bereits im globalen Array currentTypes vorhanden ist
-        if (!currentTypes.includes(typeNameCapitalized)) {
-            currentTypes.push(typeNameCapitalized);
-        }
     });
 }
 
@@ -90,6 +84,7 @@ function openPokemonCard(i) {
     let pokemonContainer = document.getElementById('dialog');
     let currentPokemon = pokemons[i];
     pokemonContainer.innerHTML = generatePokemonCardHtml(i, currentPokemon);
+    renderPokemonTypes(i, `pokemon-type-container${i}`)
     addPokemonAbilities(i, currentPokemon);
     loadTypColor(currentPokemon);
     renderChart(currentPokemon);
@@ -116,7 +111,7 @@ function closePokemonCard() {
 }
 
 function addPokemonAbilities(i, currentPokemon) {
-    const abilityBox = document.getElementById(`abilities_${i}`);
+    const abilityBox = document.getElementById(`abilities${i}`);
     abilityBox.innerHTML = '';
     let isLast = false;
 
