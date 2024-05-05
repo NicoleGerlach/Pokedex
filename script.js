@@ -24,14 +24,14 @@ const typColors = {
 
 async function fetchData(url) {
     try {
-        toggleLoadingScreen(true); // Ladebildschirm anzeigen
+        toggleLoadingScreen(true);
         let response = await fetch(url);
         let data = await response.json();
-        toggleLoadingScreen(false); // Ladebildschirm ausblenden
+        toggleLoadingScreen(false);
         return data;
     } catch (error) {
         console.error('Fehler beim Laden der Daten:', error);
-        toggleLoadingScreen(false); // Ladebildschirm im Fehlerfall ausblenden
+        toggleLoadingScreen(false);
     }
 }
 
@@ -53,15 +53,14 @@ function renderPokemons() {
         pokemonContainer.innerHTML += generatePokemonHtml(i, pokemon);
         loadTypColor(pokemon, i);
         renderPokemonTypes(i, `pokemon-type-box${i}`);
+        loadTypeColorForDetailView(pokemon);
     }
     renderPokemonNames();
 }
 
 function renderPokemonNames() { 
-    //Namen rendern und in Array speichern vereinfacht Suchfunktion
     for (let n = 0; n < pokemons.length; n++) {
         let currentName = pokemons[n].name.toLowerCase();
-        // Abfrage, um Dopplungen zu vermeiden
         if (!currentNames.includes(currentName)) {
             currentNames.push(currentName);
         }
@@ -85,7 +84,8 @@ function openPokemonCard(i) {
     pokemonContainer.innerHTML = generatePokemonCardHtml(i, currentPokemon);
     renderPokemonTypes(i, `pokemon-type-container${i}`)
     addPokemonAbilities(i, currentPokemon);
-    loadTypColor(currentPokemon);
+    // loadTypColor(currentPokemon);
+    loadTypeColorForDetailView(currentPokemon);
     renderChart(currentPokemon);
 }
 
@@ -93,11 +93,11 @@ function toggleLoadingScreen(show) {
     const loadingSpinner = document.getElementById('loadingSpinner');
     let button = document.getElementById('loadButton');
     if (show) {
-        loadingSpinner.classList.remove('d-none'); // Ladebildschirm anzeigen
-        button.classList.add('d-none'); // Button ausblenden
+        loadingSpinner.classList.remove('d-none');
+        button.classList.add('d-none');
     } else {
-        loadingSpinner.classList.add('d-none'); // Ladebildschirm ausblenden
-        button.classList.remove('d-none'); // Button anzeigen
+        loadingSpinner.classList.add('d-none');
+        button.classList.remove('d-none');
     }
 }
 
@@ -112,11 +112,10 @@ function closePokemonCard() {
 function addPokemonAbilities(i, currentPokemon) {
     const abilityBox = document.getElementById(`abilities${i}`);
     abilityBox.innerHTML = '';
-    let isLast = false;
     currentPokemon.abilities.forEach((ability, index) => {
         let skill = capitalizeName(ability.ability.name);
         abilityBox.innerHTML += skill;
-        if (!isLast) {
+        if (index < currentPokemon.abilities.length - 1) {
             abilityBox.innerHTML += ', ';
         }
     });
@@ -129,9 +128,25 @@ function loadTypColor(pokemon, i) {
     if (pokemonCards[i]) {
         pokemonCards[i].style.backgroundColor = color;
     }
-    let pokemonCard = document.getElementById('pokemonCard');
+   let pokemonCard = document.getElementById('pokemonCard');
     if (pokemonCard) {
         pokemonCard.style.backgroundColor = color;
+    }
+}
+
+function loadTypeColorForDetailView(pokemon) {
+    const allCurrentTypes = pokemon.types;
+    const firstType = allCurrentTypes[0].type.name;
+    const firstTypeColor = typColors[firstType];
+    const pokemonCard = document.getElementById('pokemonCard');
+    if (pokemonCard) {
+        pokemonCard.style.backgroundColor = firstTypeColor;
+        const pokemonTypeBoxes = pokemonCard.querySelectorAll('.type-box');
+        pokemonTypeBoxes.forEach((box, index) => {
+            const typeName = allCurrentTypes[index].type.name;
+            const boxColor = typColors[typeName];
+            box.style.backgroundColor = boxColor;
+        });
     }
 }
 
@@ -139,8 +154,6 @@ function loadTypColorForChart(pokemon, i) {
     let type = pokemon.types[i].type.name;
     if (typColors[type]) {
         let color = typColors[type];
-
-        // Ändert die Farbe der Balken im Chart passend zum Pokemontyp
         let chartElement = document.getElementById('chartElement' + i);
         if (chartElement) {
             chartElement.style.backgroundColor = color;
@@ -148,7 +161,7 @@ function loadTypColorForChart(pokemon, i) {
     }
 }
 
-async function loadMorePokemon(i) {
+async function loadMorePokemon() {
     let offset = pokemons.length;
     let url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`;
     let response = await fetch(url);
@@ -161,7 +174,7 @@ async function loadMorePokemon(i) {
         let newIndex = offset + j;
         renderNewPokemon(newIndex);
         loadTypColor(pokemonData, newIndex);
-        renderPokemonTypes(newIndex);
+        // renderPokemonTypes(newIndex);
     }
 }
 
@@ -170,6 +183,7 @@ async function renderNewPokemon(index) {
     let pokemon = pokemons[index];
     pokemonContainer.innerHTML += generatePokemonHtml(index, pokemon);
     renderPokemonNames();
+    renderPokemonTypes(index, `pokemon-type-box${index}`);
 }
 
 function toggleInfos(section) {
@@ -208,7 +222,7 @@ function previousPokemonCard(i) {
     openPokemonCard(currentIndex);
 }
 
-function capitalizeName(name) { //Schreibt ersten Buchstaben der Variablen und ersten Buchstaben nach Bindestrich groß
+function capitalizeName(name) {
     return name.split('-').map(word => {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }).join('-');
@@ -216,7 +230,7 @@ function capitalizeName(name) { //Schreibt ersten Buchstaben der Variablen und e
 
 function handleSearch() {
     let filterWord = document.getElementById('searchInput').value.trim();
-    if (filterWord.length < 3) {
+    if (filterWord.length > 0 &&  filterWord.length < 3) {
         pokemons.forEach((pokemon, i) => {
             document.getElementById(`pokemon-${i}`).style.displax = 'flex';
         });
@@ -229,13 +243,9 @@ function searchForPokemon(filterWord) {
     let searchNames = currentNames.filter(function (name) {
         return name.includes(filterWord);
     });
-
-    // Verstecke alle Pokemon
     pokemons.forEach((pokemon, i) => {
         document.getElementById(`pokemon-${i}`).classList.add('d-none');
     });
-
-    // Zeige nur passende Pokemon an
     searchNames.forEach((name) => {
         let index = currentNames.indexOf(name);
         document.getElementById(`pokemon-${index}`).classList.remove('d-none');
@@ -244,7 +254,5 @@ function searchForPokemon(filterWord) {
 
 function deleteCharactersOfInput(i) {
     document.getElementById('searchInput').value = '';
-    pokemons.forEach((pokemon, index) => {
-        document.getElementById(`pokemon-${index}`).classList.remove('d-none');
-    });
+    handleSearch();
 }

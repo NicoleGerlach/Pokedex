@@ -1,5 +1,5 @@
 function generatePokemonHtml(i, pokemon) {
-    return `
+    return /* html */ `
         <div id="pokemon-${i}" class="pokemonCardSmall shrink" onclick="openPokemonCard(${i})">
             <img class="pokemon-img" src="${pokemon.sprites.other.dream_world.front_default}">
             <h2 id="pokemonName" class="pokemon-name first-letter">${pokemon.forms[0].name}</h2>
@@ -9,9 +9,9 @@ function generatePokemonHtml(i, pokemon) {
 }
 
 function generatePokemonCardHtml(i, currentPokemon) {
-    return `
+    return /* html */ `
     <div id="pokemonCard" onclick="dontClose(event)">
-        <h1 class="first-letter">${currentPokemon.name}</h1><div
+        <h1 class="first-letter">${currentPokemon.name}</h1><div>
         <div class="info-container">
             <img class="pokemon-img margin-top" src="${currentPokemon.sprites.other.dream_world.front_default}">
             <div class="arrow">
