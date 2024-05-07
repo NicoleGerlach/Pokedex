@@ -50,6 +50,7 @@ header h2 {
     color: #757575;
     border-radius: 20px;
     border: solid 1px #757575;
+    max-width: 260px;
 }
 
 .search-area img {
@@ -346,6 +347,19 @@ h3 {
     margin: 24px;
 }
 
+::-webkit-scrollbar {
+    width: 16px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
 @media (max-width: 619px) {
 
     .header-area {
@@ -355,5 +369,25 @@ h3 {
 
     header h2 {
         margin-left: unset;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+    .pokemon-img {
+        height: 150px;
+    }
+
+    .info-container, #pokemonCard {
+        max-width: -webkit-fill-available;
+    }
+
+    .arrow {
+        margin: -35px 8px 8px 8px;
+    }
+
+    header {
+        padding: 16px 16px 16px 16px; 
     }
 }

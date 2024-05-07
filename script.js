@@ -77,7 +77,8 @@ function renderPokemonTypes(i, id) {
         typeNameCapitalized = capitalizeName(oneType.type.name);
         pokemonTypeBox.innerHTML += `<div id="pokemon-${i}${index}" class="type-box">${typeNameCapitalized}</div>`;
     });
-    loadColorForTypes(i, pokemonTypes);
+    loadColorForTypesSmallCard(i, pokemonTypes);
+    loadColorForTypesCard(i, pokemonTypes);
 }
 
 function openPokemonCard(i) {
@@ -85,10 +86,11 @@ function openPokemonCard(i) {
     let pokemonContainer = document.getElementById('dialog');
     let currentPokemon = pokemons[i];
     pokemonContainer.innerHTML = generatePokemonCardHtml(i, currentPokemon);
+    document.body.style.overflow = 'hidden';
     renderPokemonTypes(i, `pokemon-type-container${i}`)
     addPokemonAbilities(i, currentPokemon);
     loadBackgroundColor(currentPokemon, i);
-    loadColorForTypes(currentPokemon, i);
+    loadColorForTypesCard(currentPokemon, i);
     renderChart(currentPokemon);
 }
 
@@ -113,6 +115,7 @@ function dontClose(event) {
 
 function closePokemonCard() {
     document.getElementById('dialog').classList.add('d-none');
+    document.body.style.overflow = 'unset';
 }
 
 function addPokemonAbilities(i, currentPokemon) {
@@ -140,7 +143,7 @@ function loadBackgroundColor(pokemon, i) {
     }
 }
 
-function loadColorForTypes(i, types) {
+function loadColorForTypesSmallCard(i, types) {
     const pokemonTypeBox = document.getElementById(`pokemon-type-box${i}`);
     if (pokemonTypeBox) {
         types.forEach((type, index) => {
@@ -150,7 +153,10 @@ function loadColorForTypes(i, types) {
             pokemonTypeBoxes[index].style.backgroundColor = boxColor;
         });
     }
-    const pokemonTypeBoxCard = document.getElementById(`pokemon-type-container${i}`);
+}
+
+function loadColorForTypesCard(i, types) {
+const pokemonTypeBoxCard = document.getElementById(`pokemon-type-container${i}`);
     if (pokemonTypeBoxCard) {
         types.forEach((type, index) => {
             const typeName = type.type.name;
@@ -171,7 +177,6 @@ function loadTypColorForChart(pokemon, i) {
         }
     }
 }
-
 async function loadMorePokemon() {
     toggleLoadingScreen(true);
     let offset = pokemons.length;
@@ -179,17 +184,19 @@ async function loadMorePokemon() {
     let response = await fetch(url);
     let newPokemons = await response.json();
     for (let j = 0; j < newPokemons.results.length; j++) {
-        let urlPokemon = newPokemons.results[j].url;
-        let responsePokemon = await fetch(urlPokemon);
-        let pokemonData = await responsePokemon.json();
-        pokemons.push(pokemonData);
-        let newIndex = offset + j;
-        let currentPokemon = pokemons[j];
-        renderNewPokemon(offset + j, newIndex);
-        loadBackgroundColor(pokemons[j], currentPokemon);
+      await processPokemon(newPokemons.results[j], offset + j);
     }
     toggleLoadingScreen(false);
-}
+  }
+  
+  async function processPokemon(pokemon, newIndex) {
+    let urlPokemon = pokemon.url;
+    let responsePokemon = await fetch(urlPokemon);
+    let pokemonData = await responsePokemon.json();
+    pokemons.push(pokemonData);
+    renderNewPokemon(newIndex, newIndex);
+    loadBackgroundColor(pokemons[newIndex], pokemonData);
+  }
 
 async function renderNewPokemon(index) {
     let pokemonContainer = document.getElementById('content');
@@ -198,7 +205,7 @@ async function renderNewPokemon(index) {
     renderPokemonNames();
     renderPokemonTypes(index, `pokemon-type-box${index}`);
     loadBackgroundColor(pokemon, index);
-    loadColorForTypes(pokemon, index)
+    loadColorForTypesCard(pokemon, index)
 }
 
 function toggleInfos(section) {
