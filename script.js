@@ -1,8 +1,10 @@
 let pokemons = [];
 let currentIndex;
 let currentNames = [];
+let isFirstPokemon = false;
+let isLastPokemon = false;
 
-const typColors = {
+const typeColors = {
     fire: '#FF421C',
     water: '#2C9BE3',
     bug: '#92C12A',
@@ -20,6 +22,7 @@ const typColors = {
     ghost: '#6E4370',
     ice: '#74CFC0',
     dragon: '#5670BE',
+    dark: '#222222',
 };
 
 async function fetchData(url) {
@@ -51,14 +54,13 @@ function renderPokemons() {
     for (let i = 0; i < pokemons.length; i++) {
         const pokemon = pokemons[i];
         pokemonContainer.innerHTML += generatePokemonHtml(i, pokemon);
-        loadTypColor(pokemon, i);
         renderPokemonTypes(i, `pokemon-type-box${i}`);
-        loadTypeColorForDetailView(pokemon);
+        loadBackgroundColor(pokemon, i);
     }
     renderPokemonNames();
 }
 
-function renderPokemonNames() { 
+function renderPokemonNames() {
     for (let n = 0; n < pokemons.length; n++) {
         let currentName = pokemons[n].name.toLowerCase();
         if (!currentNames.includes(currentName)) {
@@ -71,10 +73,11 @@ function renderPokemonTypes(i, id) {
     const pokemonTypeBox = document.getElementById(id);
     pokemonTypeBox.innerHTML = '';
     let pokemonTypes = pokemons[i].types;
-    pokemonTypes.forEach((oneType) => {
+    pokemonTypes.forEach((oneType, index) => {
         typeNameCapitalized = capitalizeName(oneType.type.name);
-        pokemonTypeBox.innerHTML += `<div class="type-box">${typeNameCapitalized}</div>`;
+        pokemonTypeBox.innerHTML += `<div id="pokemon-${i}${index}" class="type-box">${typeNameCapitalized}</div>`;
     });
+    loadColorForTypes(i, pokemonTypes);
 }
 
 function openPokemonCard(i) {
@@ -84,20 +87,23 @@ function openPokemonCard(i) {
     pokemonContainer.innerHTML = generatePokemonCardHtml(i, currentPokemon);
     renderPokemonTypes(i, `pokemon-type-container${i}`)
     addPokemonAbilities(i, currentPokemon);
-    // loadTypColor(currentPokemon);
-    loadTypeColorForDetailView(currentPokemon);
+    loadBackgroundColor(currentPokemon, i);
+    loadColorForTypes(currentPokemon, i);
     renderChart(currentPokemon);
 }
 
 function toggleLoadingScreen(show) {
     const loadingSpinner = document.getElementById('loadingSpinner');
     let button = document.getElementById('loadButton');
+    let content = document.getElementById('content');
     if (show) {
         loadingSpinner.classList.remove('d-none');
         button.classList.add('d-none');
+        content.classList.add('d-none');
     } else {
         loadingSpinner.classList.add('d-none');
         button.classList.remove('d-none');
+        content.classList.remove('d-none');
     }
 }
 
@@ -121,39 +127,44 @@ function addPokemonAbilities(i, currentPokemon) {
     });
 }
 
-function loadTypColor(pokemon, i) {
+function loadBackgroundColor(pokemon, i) {
     let type = pokemon.types[0].type.name;
-    let color = typColors[type];
-    let pokemonCards = document.getElementsByClassName('pokemonCardSmall');
+    let color = typeColors[type];
+    let pokemonCards = document.getElementsByClassName('pokemon-card-small');
     if (pokemonCards[i]) {
         pokemonCards[i].style.backgroundColor = color;
     }
-   let pokemonCard = document.getElementById('pokemonCard');
+    let pokemonCard = document.getElementById('pokemonCard');
     if (pokemonCard) {
         pokemonCard.style.backgroundColor = color;
     }
 }
 
-function loadTypeColorForDetailView(pokemon) {
-    const allCurrentTypes = pokemon.types;
-    const firstType = allCurrentTypes[0].type.name;
-    const firstTypeColor = typColors[firstType];
-    const pokemonCard = document.getElementById('pokemonCard');
-    if (pokemonCard) {
-        pokemonCard.style.backgroundColor = firstTypeColor;
-        const pokemonTypeBoxes = pokemonCard.querySelectorAll('.type-box');
-        pokemonTypeBoxes.forEach((box, index) => {
-            const typeName = allCurrentTypes[index].type.name;
-            const boxColor = typColors[typeName];
-            box.style.backgroundColor = boxColor;
+function loadColorForTypes(i, types) {
+    const pokemonTypeBox = document.getElementById(`pokemon-type-box${i}`);
+    if (pokemonTypeBox) {
+        types.forEach((type, index) => {
+            const typeName = type.type.name;
+            const boxColor = typeColors[typeName];
+            const pokemonTypeBoxes = pokemonTypeBox.querySelectorAll('.type-box');
+            pokemonTypeBoxes[index].style.backgroundColor = boxColor;
+        });
+    }
+    const pokemonTypeBoxCard = document.getElementById(`pokemon-type-container${i}`);
+    if (pokemonTypeBoxCard) {
+        types.forEach((type, index) => {
+            const typeName = type.type.name;
+            const boxColor = typeColors[typeName];
+            const pokemonTypeBoxesCard = pokemonTypeBoxCard.querySelectorAll('.type-box');
+            pokemonTypeBoxesCard[index].style.backgroundColor = boxColor;
         });
     }
 }
 
 function loadTypColorForChart(pokemon, i) {
     let type = pokemon.types[i].type.name;
-    if (typColors[type]) {
-        let color = typColors[type];
+    if (typeColors[type]) {
+        let color = typeColors[type];
         let chartElement = document.getElementById('chartElement' + i);
         if (chartElement) {
             chartElement.style.backgroundColor = color;
@@ -162,6 +173,7 @@ function loadTypColorForChart(pokemon, i) {
 }
 
 async function loadMorePokemon() {
+    toggleLoadingScreen(true);
     let offset = pokemons.length;
     let url = `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=20`;
     let response = await fetch(url);
@@ -172,10 +184,11 @@ async function loadMorePokemon() {
         let pokemonData = await responsePokemon.json();
         pokemons.push(pokemonData);
         let newIndex = offset + j;
-        renderNewPokemon(newIndex);
-        loadTypColor(pokemonData, newIndex);
-        // renderPokemonTypes(newIndex);
+        let currentPokemon = pokemons[j];
+        renderNewPokemon(offset + j, newIndex);
+        loadBackgroundColor(pokemons[j], currentPokemon);
     }
+    toggleLoadingScreen(false);
 }
 
 async function renderNewPokemon(index) {
@@ -184,6 +197,8 @@ async function renderNewPokemon(index) {
     pokemonContainer.innerHTML += generatePokemonHtml(index, pokemon);
     renderPokemonNames();
     renderPokemonTypes(index, `pokemon-type-box${index}`);
+    loadBackgroundColor(pokemon, index);
+    loadColorForTypes(pokemon, index)
 }
 
 function toggleInfos(section) {
@@ -215,11 +230,18 @@ function showSectionBasestats(about, baseStats, aboutFolder, baseStatsFolder) {
 function nextPokemonCard(i) {
     currentIndex = (i + 1 + pokemons.length) % pokemons.length;
     openPokemonCard(currentIndex);
+    if (isLastPokemon && currentIndex === 0) {
+        closePokemonCard();
+    }
+    isLastPokemon = currentIndex === pokemons.length - 1;
 }
 
 function previousPokemonCard(i) {
     currentIndex = (i - 1 + pokemons.length) % pokemons.length;
     openPokemonCard(currentIndex);
+    if (currentIndex === pokemons.length - 1) {
+        closePokemonCard();
+    }
 }
 
 function capitalizeName(name) {
@@ -230,9 +252,9 @@ function capitalizeName(name) {
 
 function handleSearch() {
     let filterWord = document.getElementById('searchInput').value.trim();
-    if (filterWord.length > 0 &&  filterWord.length < 3) {
-        pokemons.forEach((pokemon, i) => {
-            document.getElementById(`pokemon-${i}`).style.displax = 'flex';
+    if (filterWord.length > 0 && filterWord.length < 3) {
+        pokemons.forEach((index, i) => {
+            document.getElementById(`pokemonCardSmall${i}`).style.displax = 'flex';
         });
     } else {
         searchForPokemon(filterWord.toLowerCase());
@@ -244,11 +266,11 @@ function searchForPokemon(filterWord) {
         return name.includes(filterWord);
     });
     pokemons.forEach((pokemon, i) => {
-        document.getElementById(`pokemon-${i}`).classList.add('d-none');
+        document.getElementById(`pokemonCardSmall${i}`).classList.add('d-none');
     });
-    searchNames.forEach((name) => {
+    searchNames.forEach((name, i) => {
         let index = currentNames.indexOf(name);
-        document.getElementById(`pokemon-${index}`).classList.remove('d-none');
+        document.getElementById(`pokemonCardSmall${index}`).classList.remove('d-none');
     });
 }
 

@@ -1,7 +1,7 @@
 function generatePokemonHtml(i, pokemon) {
     return /* html */ `
-        <div id="pokemon-${i}" class="pokemonCardSmall shrink" onclick="openPokemonCard(${i})">
-            <img class="pokemon-img" src="${pokemon.sprites.other.dream_world.front_default}">
+        <div id="pokemonCardSmall${i}" class="pokemon-card-small shrink" onclick="openPokemonCard(${i})">
+            <img class="pokemon-img" loading="lazy" src="${pokemon.sprites.other.dream_world.front_default}">
             <h2 id="pokemonName" class="pokemon-name first-letter">${pokemon.forms[0].name}</h2>
             <div id="pokemon-type-box${i}" class="type"></div>
         </div>
@@ -13,7 +13,7 @@ function generatePokemonCardHtml(i, currentPokemon) {
     <div id="pokemonCard" onclick="dontClose(event)">
         <h1 class="first-letter">${currentPokemon.name}</h1><div>
         <div class="info-container">
-            <img class="pokemon-img margin-top" src="${currentPokemon.sprites.other.dream_world.front_default}">
+            <img class="pokemon-img margin-top" loading="lazy" src="${currentPokemon.sprites.other.dream_world.front_default}">
             <div class="arrow">
                 <img onclick="previousPokemonCard(${i})" src="./img/linker-pfeil.png">
                 <img onclick="nextPokemonCard(${i})" src="./img/rechter-pfeil.png">

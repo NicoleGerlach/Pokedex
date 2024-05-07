@@ -9,7 +9,7 @@ function renderChart(currentPokemon) {
 
     // Farbe der Balken passend zum Typ des Pokemon
     let type = currentPokemon.types[0].type.name; 
-    backgroundColors.push(typColors[type]);
+    backgroundColors.push(typeColors[type]);
   }
   new Chart(ctx, {
     type: 'bar',
